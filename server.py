@@ -11,9 +11,13 @@ def sent_detector():
     '''
     text_to_analyze = request.args.get('textToAnalyze')
     emotions = emotion_detector(text_to_analyze)
+
+    if emotions['dominant_emotion'] is None:
+        return "Invalid text! Please try again!", 200
+
     emotion_scores = ", ".join([f"'{emotion}': {score}" for emotion, score in emotions.items() if emotion != "dominant_emotion"])
     dominant_emotion = emotions['dominant_emotion']
-    
+
     return f"For the given statement, the system response is {emotion_scores}. The dominant emotion is {dominant_emotion}."
    
 @app.route("/")
