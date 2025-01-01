@@ -1,3 +1,7 @@
+"""
+This module sets up a Flask application to serve an emotion detection web app.
+"""
+
 from flask import Flask, request, render_template
 from EmotionDetection import emotion_detector
 
@@ -15,17 +19,23 @@ def sent_detector():
     if emotions['dominant_emotion'] is None:
         return "Invalid text! Please try again!", 200
 
-    emotion_scores = ", ".join([f"'{emotion}': {score}" for emotion, score in emotions.items() if emotion != "dominant_emotion"])
+    emotion_scores = ", ".join(
+        [f"'{emotion}': {score}" for emotion, score in emotions.items()
+        if emotion != "dominant_emotion"]
+    )
     dominant_emotion = emotions['dominant_emotion']
 
-    return f"For the given statement, the system response is {emotion_scores}. The dominant emotion is {dominant_emotion}."
-   
+    return (
+        f"For the given statement, the system response is {emotion_scores}."
+        f" The dominant emotion is {dominant_emotion}."
+    )
+
 @app.route("/")
 def render_index_page():
     ''' This function initiates the rendering of the main application
         page over the Flask channel
     '''
     return render_template('index.html')
-    
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
